@@ -16,6 +16,7 @@ IntBST::IntBST() {
 // destructor deletes all nodes
 IntBST::~IntBST() {
     clear(root);
+    root = nullptr; 
 }
 
 // recursive helper for destructor
@@ -70,8 +71,10 @@ void IntBST::printPreOrder() const {
 // recursive helper for printPreOrder()
 void IntBST::printPreOrder(Node *n) const {
     if (n != nullptr) {
-        cout << n->info << " ";
+        cout << n->info;
+        if (n->left != nullptr || n->right != nullptr) cout << " "; 
         printPreOrder(n->left);
+        if (n->left != nullptr && n->right != nullptr) cout << " ";
         printPreOrder(n->right);
     }
 }
@@ -84,7 +87,8 @@ void IntBST::printInOrder() const {
 void IntBST::printInOrder(Node *n) const {
     if (n != nullptr) {
         printInOrder(n->left);
-        cout << n->info << " ";
+        cout << n->info;
+        if (n->right != nullptr) cout << " "; 
         printInOrder(n->right);
     }
 }
@@ -98,8 +102,10 @@ void IntBST::printPostOrder() const {
 void IntBST::printPostOrder(Node *n) const {
     if (n != nullptr) {
         printPostOrder(n->left);
+        if (n->left != nullptr || n->right != nullptr) cout << " "; 
         printPostOrder(n->right);
-        cout << n->info << " ";
+        if (n->right != nullptr) cout << " ";
+        cout << n->info;
     }
 }
 
@@ -255,19 +261,16 @@ bool IntBST::remove(int value){
     // 2 children
     else {
         Node* successor = getSuccessorNode(nodeToRemove->info);
-        while (successor->left != nullptr) {
-            successor = successor->left;
-        }
         
         nodeToRemove->info = successor->info;
-        Node* successorParent = successor->parent;
-        if (successorParent->left == successor) {
-            successorParent->left = successor->right;
+       
+        if (successor->parent->left == successor) {
+            successor->parent->left = successor->right;
         } else {
-            successorParent->right = successor->right;
+            successor->parent->right = successor->right;
         }
         if (successor->right != nullptr) {
-            successor->right->parent = successorParent;
+            successor->right->parent = successor->parent;
         }
         delete successor;
     }
