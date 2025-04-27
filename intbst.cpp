@@ -42,7 +42,7 @@ bool IntBST::insert(int value) {
 // recursive helper for insert (assumes n is never 0)
 bool IntBST::insert(int value, Node *n) {
     if (value == n->info) {
-        return false; // Duplicate value
+        return false; 
     } else if (value < n->info) {
         if (n->left == nullptr) {
             n->left = new Node(value);
@@ -80,32 +80,30 @@ void IntBST::printPreOrder(Node *n) const {
 }
 
 // print tree data in-order, with helper
-void IntBST::printInOrder() const {
+void IntBST::printInOrder() const { 
     printInOrder(root);
-    cout << endl;
 }
-void IntBST::printInOrder(Node *n) const {
+
+void IntBST::printInOrder(Node *n) const { 
     if (n != nullptr) {
         printInOrder(n->left);
         cout << n->info;
-        if (n->right != nullptr) cout << " "; 
+        if (n->left != nullptr || n->right != nullptr) cout << " "; 
         printInOrder(n->right);
     }
 }
 
 // prints tree data post-order, with helper
-void IntBST::printPostOrder() const {
+void IntBST::printPostOrder() const { 
     printPostOrder(root);
-    cout << endl;
 }
 
-void IntBST::printPostOrder(Node *n) const {
+void IntBST::printPostOrder(Node *n) const { 
     if (n != nullptr) {
         printPostOrder(n->left);
-        if (n->left != nullptr || n->right != nullptr) cout << " "; 
         printPostOrder(n->right);
-        if (n->right != nullptr) cout << " ";
         cout << n->info;
+        if (n->left != nullptr || n->right != nullptr) cout << " "; 
     }
 }
 
@@ -221,7 +219,7 @@ int IntBST::getSuccessor(int value) const{
 
 // deletes the Node containing the given value from the tree
 // returns true if the node exist and was deleted or false if the node does not exist
-bool IntBST::remove(int value){
+bool IntBST::remove(int value){ 
     Node* nodeToRemove = getNodeFor(value, root);
     if (nodeToRemove == nullptr) {
         return false;
@@ -241,7 +239,7 @@ bool IntBST::remove(int value){
             delete nodeToRemove;
         }
     }
-    // 1 children
+    // one child
     else if (nodeToRemove->left == nullptr || nodeToRemove->right == nullptr) {
         Node* child = (nodeToRemove->left != nullptr) ? nodeToRemove->left : nodeToRemove->right;
         if (nodeToRemove == root) {
@@ -258,19 +256,24 @@ bool IntBST::remove(int value){
         }
         delete nodeToRemove;
     }
-    // 2 children
+    // two children
     else {
         Node* successor = getSuccessorNode(nodeToRemove->info);
-        
         nodeToRemove->info = successor->info;
-       
-        if (successor->parent->left == successor) {
-            successor->parent->left = successor->right;
+        if (nodeToRemove->right == successor) {
+            nodeToRemove->right = successor->right;
+            if (successor->right != nullptr) {
+                successor->right->parent = nodeToRemove;
+            }
         } else {
-            successor->parent->right = successor->right;
-        }
-        if (successor->right != nullptr) {
-            successor->right->parent = successor->parent;
+            if (successor->parent->left == successor) {
+                successor->parent->left = successor->right;
+            } else {
+                successor->parent->right = successor->right;
+            }
+            if (successor->right != nullptr) {
+                successor->right->parent = successor->parent;
+            }
         }
         delete successor;
     }
