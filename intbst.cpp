@@ -88,7 +88,7 @@ void IntBST::printInOrder(Node *n) const {
     if (n != nullptr) {
         printInOrder(n->left);
         cout << n->info;
-        if (n->left != nullptr || n->right != nullptr) cout << " "; 
+        if (n->right != nullptr || n->parent != nullptr) cout << " "; 
         printInOrder(n->right);
     }
 }
@@ -103,7 +103,7 @@ void IntBST::printPostOrder(Node *n) const {
         printPostOrder(n->left);
         printPostOrder(n->right);
         cout << n->info;
-        if (n->left != nullptr || n->right != nullptr) cout << " "; 
+        if (n->parent != nullptr) cout << " "; 
     }
 }
 
